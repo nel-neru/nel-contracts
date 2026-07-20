@@ -1,0 +1,17 @@
+# Vendored copy of the human-gate SSOT.
+#
+# Source of record: nel-os docs/plans/NEL_PLATFORM_IMPLEMENTATION_STATE.yaml -> `human_gates`.
+# GateClass in nel_contracts.models.approval is bound 1:1 to this list (design D16). This
+# vendored copy keeps the public repo self-contained; the AUTHORITATIVE cross-repo drift check
+# lives in nel-os CI (which depends on nel-contracts, never the reverse). The conformance test
+# also cross-checks the live STATE.yaml when NEL_OS_STATE_YAML points at it.
+human_gates:
+  - main_merge
+  - external_publish_or_public_repo_mutation
+  - payment_or_purchase
+  - missing_credentials_or_permissions
+  - legal_or_license_decision
+  - irreversible_destructive_migration
+  - history_rewrite
+  - pii_storage_policy_change
+  - irreversible_architecture_decision_without_adr_precedent

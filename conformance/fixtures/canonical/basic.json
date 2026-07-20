@@ -1,0 +1,9 @@
+{
+  "b": 1,
+  "a": [3, 2, 1],
+  "é": "café",
+  "nested": { "z": true, "y": null, "x": "line\nbreak\ttab" },
+  "unicode_key_omega": "Ω",
+  "empty": {},
+  "list_of_objs": [{ "k2": 2, "k1": 1 }, { "k3": 3 }]
+}

@@ -1,0 +1,1 @@
+{"a":[3,2,1],"b":1,"empty":{},"list_of_objs":[{"k1":1,"k2":2},{"k3":3}],"nested":{"x":"line\nbreak\ttab","y":null,"z":true},"unicode_key_omega":"Ω","é":"café"}

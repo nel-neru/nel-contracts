@@ -1,0 +1,15 @@
+# Normalize line endings to LF in the blob. The editing environment writes CRLF on Windows;
+# `* text=auto` guarantees committed blobs are LF so canonical byte-fixtures and cross-platform
+# CI stay byte-identical.
+* text=auto
+
+*.md text eol=lf
+*.py text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.bytes text eol=lf
+
+# Golden byte-fixtures are canonical UTF-8; keep them LF and never auto-mangled.
+conformance/fixtures/canonical/*.bytes text eol=lf
