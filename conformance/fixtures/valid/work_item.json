@@ -1,0 +1,24 @@
+{
+  "schema": "work-item",
+  "data": {
+    "work_item_id": "task-20260720-141530-generalize-the-task-envelope-to-neutral-workitem",
+    "title": "Generalize the Task Envelope",
+    "kind": "git_implementation",
+    "acceptance": ["neutral WorkItem projects the task losslessly"],
+    "status": "completed",
+    "risk": {
+      "level": "low",
+      "network": false,
+      "deployment": false,
+      "secrets": false,
+      "destructive": false
+    },
+    "content_identity": { "content_tree_oid": "0123456789abcdef0123456789abcdef01234567" },
+    "projection_sequence": 7,
+    "current_attempt_ref": "attempt-0001",
+    "evidence_refs": [],
+    "created_at": "2026-07-20T12:00:00Z",
+    "updated_at": "2026-07-20T13:00:00Z",
+    "metadata": {}
+  }
+}

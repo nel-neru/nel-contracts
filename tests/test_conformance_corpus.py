@@ -10,6 +10,8 @@ from nel_contracts.models.capability import Capability
 from nel_contracts.models.content_identity import ContentIdentity
 from nel_contracts.models.seam import SeamReceipt
 from nel_contracts.models.work import PublishIntent
+from nel_contracts.models.workflow import WorkflowRun
+from nel_contracts.models.workitem import GitWorkExtension, WorkItem
 
 _FIXTURES = Path(__file__).resolve().parent.parent / "conformance" / "fixtures"
 _VALID = _FIXTURES / "valid"
@@ -21,6 +23,9 @@ _MODELS: dict[str, type[BaseModel]] = {
     "publish-intent": PublishIntent,
     "content-identity": ContentIdentity,
     "capability": Capability,
+    "work-item": WorkItem,
+    "git-work-extension": GitWorkExtension,
+    "workflow-run": WorkflowRun,
 }
 
 

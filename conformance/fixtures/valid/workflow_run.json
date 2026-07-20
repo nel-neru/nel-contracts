@@ -1,0 +1,13 @@
+{
+  "schema": "workflow-run",
+  "data": {
+    "run_id": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+    "definition_id": "git-delivery",
+    "work_item_ref": "task-20260720-141530-generalize-the-task-envelope",
+    "status": "running",
+    "node_states": { "implement": "completed", "review": "running" },
+    "projection_sequence": 3,
+    "created_at": "2026-07-20T12:00:00Z",
+    "updated_at": "2026-07-20T12:30:00Z"
+  }
+}

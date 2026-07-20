@@ -53,6 +53,11 @@ from nel_contracts.models.work import (  # noqa: E402
     SpendIntent,
     VisibilityChangeIntent,
 )
+from nel_contracts.models.workflow import (  # noqa: E402
+    WorkflowDefinition,
+    WorkflowRun,
+)
+from nel_contracts.models.workitem import GitWorkExtension, WorkItem  # noqa: E402
 from nel_contracts.seam.wire_envelope import WireEnvelope  # noqa: E402
 from nel_contracts.version import SCHEMA_ID_BASE, generator_toolchain  # noqa: E402
 
@@ -87,6 +92,10 @@ SCHEMA_MODELS: dict[str, type[BaseModel]] = {
     "repo-metadata": RepoMetadata,
     "ledger-event": LedgerEvent,
     "redaction-event": RedactionEvent,
+    "work-item": WorkItem,
+    "git-work-extension": GitWorkExtension,
+    "workflow-definition": WorkflowDefinition,
+    "workflow-run": WorkflowRun,
 }
 
 

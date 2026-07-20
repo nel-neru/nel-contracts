@@ -6,7 +6,7 @@ import pydantic
 
 # Distribution version of ``nel-contracts`` (SemVer). Enum-add == MINOR, breaking wire
 # shape == MAJOR (embedded in the schema ``$id`` path). See CHANGELOG.md.
-PACKAGE_VERSION: Final[str] = "0.1.0"
+PACKAGE_VERSION: Final[str] = "0.2.0"
 
 # The contract MAJOR line. A breaking shape change increments this and the schema ``$id``
 # path segment (``.../contracts/v1/...``) together.

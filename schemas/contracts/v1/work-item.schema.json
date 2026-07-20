@@ -1,0 +1,282 @@
+{
+  "$comment": "generated from pinned pydantic + type-level overrides, guarded by generate-and-diff (nel-contracts projector 1); a fuller hand-controlled projection layer is deferred (K-phase)",
+  "$defs": {
+    "ContentIdentity": {
+      "additionalProperties": false,
+      "description": "A repo-agnostic identity for the content an intent acts on.\n\nAt least one identifier is required. For non-git intents the kernel persists the exact\nsubmitted payload immutably at submit time and recomputes ``content_digest`` over the\nstored copy, executing only against that stored copy (resolves the non-git TOCTOU\nfinding) — behavior documented here, enforced kernel-side.",
+      "properties": {
+        "commit_sha": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commit Sha"
+        },
+        "content_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Digest"
+        },
+        "content_tree_oid": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Tree Oid"
+        },
+        "pr_head_sha": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pr Head Sha"
+        }
+      },
+      "title": "ContentIdentity",
+      "type": "object"
+    },
+    "EvidenceEvent": {
+      "additionalProperties": false,
+      "description": "A neutral, digest-bound evidence record.\n\n``content_digest`` binds to the produced artifact by digest, never by embedding its bytes.",
+      "properties": {
+        "classification": {
+          "examples": [
+            "adjudication",
+            "capture",
+            "ledger",
+            "review",
+            "verification"
+          ],
+          "title": "EvidenceClassification",
+          "type": "string"
+        },
+        "content_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Digest",
+          "type": "string"
+        },
+        "evidence_id": {
+          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "produced_at": {
+          "format": "date-time",
+          "title": "Produced At",
+          "type": "string"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summary"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "classification",
+        "content_digest",
+        "produced_at"
+      ],
+      "title": "EvidenceEvent",
+      "type": "object"
+    },
+    "RiskClassification": {
+      "additionalProperties": false,
+      "description": "Neutral projection of the kernel ``TaskRisk``. ``destructive`` projects ``destructive_git``\n(git-ness is implied by the presence of a ``GitWorkExtension``, never a field here).",
+      "properties": {
+        "deployment": {
+          "default": false,
+          "title": "Deployment",
+          "type": "boolean"
+        },
+        "destructive": {
+          "default": false,
+          "title": "Destructive",
+          "type": "boolean"
+        },
+        "level": {
+          "examples": [
+            "critical",
+            "high",
+            "low",
+            "medium"
+          ],
+          "title": "RiskLevel",
+          "type": "string"
+        },
+        "network": {
+          "default": false,
+          "title": "Network",
+          "type": "boolean"
+        },
+        "secrets": {
+          "default": false,
+          "title": "Secrets",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "level"
+      ],
+      "title": "RiskClassification",
+      "type": "object"
+    }
+  },
+  "$id": "urn:nel:contracts:v1:work-item",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "The neutral core aggregate SHAPE — 'any action in the world' (design K2 / ADR-0014 D3).\n\nCarries NO git, NO filesystem path, NO ownership/registry digest, and NO orchestration/routing:\nthose live in the (public, path-free) :class:`GitWorkExtension` and the (private, kernel-side)\n``KernelWorktreeBinding`` respectively. A world-built instance is non-authoritative exactly like\na world-built ``SeamReceipt``; the kernel re-derives truth. In K2 this is a pure OUTWARD\nread-projection over the unchanged kernel ``TaskEnvelope`` — there is deliberately no inward\nbuild path in the package.",
+  "properties": {
+    "acceptance": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Acceptance",
+      "type": "array"
+    },
+    "content_identity": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ContentIdentity"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "current_attempt_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Current Attempt Ref"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/EvidenceEvent"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "kind": {
+      "examples": [
+        "delivery",
+        "deploy",
+        "external_read",
+        "git_implementation",
+        "history_rewrite",
+        "implementation",
+        "migration",
+        "other",
+        "pii_policy",
+        "publish",
+        "spend",
+        "visibility_change"
+      ],
+      "title": "WorkKind",
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    },
+    "projection_sequence": {
+      "minimum": 1,
+      "title": "Projection Sequence",
+      "type": "integer"
+    },
+    "risk": {
+      "$ref": "#/$defs/RiskClassification"
+    },
+    "status": {
+      "examples": [
+        "blocked",
+        "cancelled",
+        "capturing",
+        "completed",
+        "delivering",
+        "failed",
+        "planned",
+        "reviewing",
+        "revising",
+        "running",
+        "verifying"
+      ],
+      "title": "WorkStatus",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    },
+    "work_item_id": {
+      "pattern": "^[a-z0-9][a-z0-9-]{0,127}$",
+      "title": "Work Item Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "work_item_id",
+    "title",
+    "kind",
+    "acceptance",
+    "status",
+    "risk",
+    "projection_sequence",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "WorkItem",
+  "type": "object"
+}

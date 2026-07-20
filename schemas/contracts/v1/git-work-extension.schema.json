@@ -1,0 +1,100 @@
+{
+  "$comment": "generated from pinned pydantic + type-level overrides, guarded by generate-and-diff (nel-contracts projector 1); a fuller hand-controlled projection layer is deferred (K-phase)",
+  "$defs": {
+    "RepoRef": {
+      "additionalProperties": false,
+      "description": "A logical, portable repository reference. Carries no filesystem path (a public\ncontract must never leak a governor-local ``C:\\Users`` path).",
+      "properties": {
+        "host": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Host"
+        },
+        "repo": {
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+          "title": "Repo",
+          "type": "string"
+        }
+      },
+      "required": [
+        "repo"
+      ],
+      "title": "RepoRef",
+      "type": "object"
+    }
+  },
+  "$id": "urn:nel:contracts:v1:git-work-extension",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Git-specific work fields, kept OUT of the neutral ``WorkItem`` core so the core stays\nrepo-agnostic (mirrors ``GitDeliveryExtension``). PATH-FREE by construction: ``repo`` is a\n:class:`RepoRef` (which forbids filesystem paths), so no governor-local path can leak public.\n\n``content_tree_oid``, ``commits``, and ``pull_requests`` are DERIVED at projection time from the\nkernel's verification/review/delivery evidence events, never from a persisted manifest field.\nGit-as-vocabulary, never git-as-location.",
+  "properties": {
+    "base_ref": {
+      "title": "Base Ref",
+      "type": "string"
+    },
+    "commits": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Commits",
+      "type": "array"
+    },
+    "content_tree_oid": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content Tree Oid"
+    },
+    "pull_requests": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Pull Requests",
+      "type": "array"
+    },
+    "repo": {
+      "$ref": "#/$defs/RepoRef"
+    },
+    "target_visibility": {
+      "examples": [
+        "private",
+        "public"
+      ],
+      "title": "VisibilityLevel",
+      "type": "string"
+    },
+    "task_branch": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Branch"
+    }
+  },
+  "required": [
+    "repo",
+    "base_ref",
+    "target_visibility"
+  ],
+  "title": "GitWorkExtension",
+  "type": "object"
+}

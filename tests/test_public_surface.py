@@ -34,4 +34,4 @@ def test_no_provider_override_is_exported() -> None:
 
 def test_version_is_consistent() -> None:
     assert nel_contracts.__version__ == PACKAGE_VERSION
-    assert PACKAGE_VERSION == "0.1.0"
+    assert PACKAGE_VERSION == "0.2.0"

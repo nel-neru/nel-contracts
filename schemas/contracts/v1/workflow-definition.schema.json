@@ -1,0 +1,77 @@
+{
+  "$comment": "generated from pinned pydantic + type-level overrides, guarded by generate-and-diff (nel-contracts projector 1); a fuller hand-controlled projection layer is deferred (K-phase)",
+  "$defs": {
+    "WorkflowNode": {
+      "additionalProperties": false,
+      "description": "One node of a neutral plan/DAG. A minimal shell in K2; the full planner/execution semantics\n(node kinds, gating, fan-out) are owned by W2. ``kind`` is a free string here deliberately — no\nauthority attaches to a not-yet-executed plan node.",
+      "properties": {
+        "depends_on": {
+          "items": {
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+            "type": "string"
+          },
+          "title": "Depends On",
+          "type": "array"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "node_id": {
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+          "title": "Node Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node_id",
+        "kind"
+      ],
+      "title": "WorkflowNode",
+      "type": "object"
+    }
+  },
+  "$id": "urn:nel:contracts:v1:workflow-definition",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A neutral plan/DAG shape (design §4.2). Distinct from the nel-os kernel registry\n``WorkflowDefinition`` (a stage-list): different package/namespace, no rename, no collision.\nFull planner semantics land in W2; K2 ships only the shell that makes the D3 projection legible.",
+  "properties": {
+    "allowed_risk": {
+      "items": {
+        "examples": [
+          "critical",
+          "high",
+          "low",
+          "medium"
+        ],
+        "title": "RiskLevel",
+        "type": "string"
+      },
+      "title": "Allowed Risk",
+      "type": "array"
+    },
+    "definition_id": {
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+      "title": "Definition Id",
+      "type": "string"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/WorkflowNode"
+      },
+      "title": "Nodes",
+      "type": "array"
+    },
+    "version": {
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "definition_id",
+    "version"
+  ],
+  "title": "WorkflowDefinition",
+  "type": "object"
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "git-work-extension",
+  "data": {
+    "repo": { "repo": "nel-os" },
+    "base_ref": "main",
+    "content_tree_oid": "0123456789abcdef0123456789abcdef01234567",
+    "task_branch": "work/k2-stage-1-20260720",
+    "target_visibility": "private",
+    "commits": [],
+    "pull_requests": []
+  }
+}

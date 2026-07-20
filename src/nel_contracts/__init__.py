@@ -80,6 +80,22 @@ from nel_contracts.models.work import (
     WorkIntentUnion,
     coerce_work_intent,
 )
+from nel_contracts.models.workflow import (
+    WorkflowDefinition,
+    WorkflowNode,
+    WorkflowRun,
+)
+from nel_contracts.models.workitem import (
+    RISK_LEVEL_IDENTIFIERS,
+    WORK_STATUS_IDENTIFIERS,
+    GitWorkExtension,
+    RiskClassification,
+    RiskLevel,
+    WorkItem,
+    WorkItemId,
+    WorkKind,
+    WorkStatus,
+)
 from nel_contracts.seam.port import SEAM_PORT_VERBS, SeamPort
 from nel_contracts.seam.resolver import DeploymentBinding, resolve_seam
 from nel_contracts.seam.sealed import SealedSeam
@@ -143,6 +159,19 @@ __all__ = [  # noqa: RUF022  (grouped by domain for readability, not alphabetize
     "GitDeliveryExtension",
     "KNOWN_INTENT_KINDS",
     "coerce_work_intent",
+    # work item / workflow (neutral generalization, K2)
+    "WorkItem",
+    "WorkItemId",
+    "WorkStatus",
+    "WorkKind",
+    "RiskLevel",
+    "RiskClassification",
+    "GitWorkExtension",
+    "WORK_STATUS_IDENTIFIERS",
+    "RISK_LEVEL_IDENTIFIERS",
+    "WorkflowDefinition",
+    "WorkflowNode",
+    "WorkflowRun",
     # content identity
     "ContentIdentity",
     # seam DTOs

@@ -1,0 +1,9 @@
+{
+  "schema": "git-work-extension",
+  "data": {
+    "repo": { "repo": "nel-os" },
+    "base_ref": "main",
+    "target_visibility": "private",
+    "path": "C:/Users/neoma/NEL/nel-os"
+  }
+}
