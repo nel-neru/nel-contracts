@@ -1,0 +1,15 @@
+{
+  "event": {
+    "event_id": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+    "sequence": 7,
+    "prev_event_digest": "3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a",
+    "body": {
+      "kind": "decision",
+      "decision": "allow",
+      "gate": "main_merge",
+      "n": 3
+    },
+    "issued_at": "2026-07-20T12:00:00Z"
+  },
+  "expected_event_digest": "3202d9b2a7583319de2af60b148a5d9e3b6cc2acd514a2db46a508ff87323949"
+}

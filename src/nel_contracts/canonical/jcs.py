@@ -113,7 +113,10 @@ def _emit_number(value: float) -> str:
         return "0"
     if value.is_integer() and abs(value) < 1e21:
         return str(int(value))
-    # TODO(K1/K3): full RFC-8785 / ECMAScript number formatting (exponent edge cases). The
-    # conformance golden fixtures deliberately avoid non-integral floats until the four
-    # language ports share a proven number formatter.
-    return repr(value)
+    # Fail closed rather than emit best-effort (possibly wrong) bytes: a non-integral number
+    # has no agreed canonical form until the four language ports share an RFC-8785-complete
+    # number formatter.
+    # TODO(K1/K3): implement full RFC-8785 / ECMAScript number formatting and lift this guard.
+    raise ValueError(
+        "canonical profile forbids non-integral numbers pending an RFC-8785-complete formatter"
+    )

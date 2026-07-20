@@ -1,7 +1,12 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from nel_contracts.ledger.event import GENESIS_DIGEST, LedgerEvent, link_event, verify_chain
 from tests.support import ULID_A, ULID_B, ULID_C, fixed_now
+
+_FIXTURES = Path(__file__).resolve().parent.parent / "conformance" / "fixtures" / "canonical"
 
 
 def _chain() -> list[LedgerEvent]:
@@ -38,3 +43,14 @@ def test_body_tamper_breaks_downstream_link() -> None:
     # matches — the chain fails downstream even though the rewritten event looks internally fine.
     forged_e1 = events[1].model_copy(update={"body": {"kind": "decision", "tampered": True}})
     assert verify_chain([events[0], forged_e1, events[2]]) is False
+
+
+def test_golden_event_digest_is_reproduced() -> None:
+    # The digest is load-bearing: recompute it over the full non-chaining preimage
+    # ({event_id, sequence, issued_at, body} + prev_event_digest) and assert it equals the
+    # committed golden hex. Any change to the preimage or canonicalizer breaks this.
+    fixture = json.loads((_FIXTURES / "ledger_event.json").read_text(encoding="utf-8"))
+    event = LedgerEvent.model_validate(fixture["event"])
+    digest = event.event_digest()
+    assert len(digest) == 64
+    assert digest == fixture["expected_event_digest"]

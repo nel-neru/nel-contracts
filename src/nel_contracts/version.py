@@ -21,8 +21,10 @@ SCHEMA_ID_BASE: Final[str] = f"urn:nel:contracts:v{CONTRACT_MAJOR}"
 # version fail-closed rather than silently degrading (design §7).
 PROTOCOL_VERSION: Final[str] = "1.0"
 
-# Hand-controlled projector version. Recorded so a pydantic point upgrade cannot silently
-# change the emitted wire form without a deliberate, reviewed contract event (design §7).
+# Projector version, recorded alongside each generated schema. The wire form is generated from
+# pinned pydantic + type-level overrides and guarded by a generate-and-diff gate: a pydantic
+# bump that changes the emitted output fails CI until it is reviewed and regenerated. This is
+# not a fully decoupled hand-controlled projection layer — that is deferred (K-phase) (§7).
 PROJECTOR_VERSION: Final[str] = "1"
 
 # The package ships NO kernel verification key and NO attestation secret (design §0/§4).

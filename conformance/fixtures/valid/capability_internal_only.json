@@ -1,0 +1,8 @@
+{
+  "schema": "capability",
+  "data": {
+    "capability_id": "read-fixture",
+    "classification": "internal_only",
+    "egress": "none"
+  }
+}

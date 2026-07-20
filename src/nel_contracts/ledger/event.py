@@ -15,11 +15,17 @@ GENESIS_DIGEST: Final[str] = "0" * 64
 class LedgerEvent(StrictModel):
     """A reusable append-only ledger envelope with a digest hash chain (design D2 extension).
 
-    ``event_digest = sha256( bytes.fromhex(prev_event_digest) || canonical_content_bytes )``
-    where the content bytes are the D14 canonical JSON of every field except the chaining
-    fields. Computing over the canonical bytes (not re-serialized bodies) is what lets all
-    four language ports reproduce identical digests. World-authored instances are
-    non-authoritative — this is a shared envelope, not a trust root.
+    The digest binds the previous link to EVERY non-chaining field of this event. The exact
+    preimage is the raw bytes of ``prev_event_digest`` concatenated with the D14 canonical JSON
+    of the full non-chaining field set ``{event_id, sequence, issued_at, body}``::
+
+        preimage     = bytes.fromhex(prev_event_digest) + canonical_bytes(
+                           {event_id, sequence, issued_at, body})
+        event_digest = sha256(preimage)                      # 64 lowercase hex
+
+    ``event_digest`` is derived, not stored. Computing over the canonical bytes (not
+    re-serialized bodies) is what lets all four language ports reproduce identical digests.
+    World-authored instances are non-authoritative — this is a shared envelope, not a trust root.
     """
 
     event_id: Ulid
@@ -29,7 +35,9 @@ class LedgerEvent(StrictModel):
     issued_at: UtcTimestamp
 
     def canonical_content_bytes(self) -> bytes:
-        """The canonical bytes the digest is computed over (chaining fields excluded)."""
+        """Canonical bytes over the full non-chaining field set ``{event_id, sequence,
+        issued_at, body}``. ``prev_event_digest`` is excluded here and prepended as raw bytes
+        in :meth:`event_digest`; ``event_digest`` is derived and never part of the preimage."""
         content = self.model_dump(mode="json", exclude={"prev_event_digest"})
         return canonical_json_bytes(content)
 

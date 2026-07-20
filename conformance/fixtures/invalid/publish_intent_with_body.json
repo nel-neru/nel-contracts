@@ -1,0 +1,17 @@
+{
+  "schema": "publish-intent",
+  "data": {
+    "intent_id": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+    "actor": {
+      "actor_kind": "human",
+      "is_advisory": true,
+      "attestation_state": "unattested"
+    },
+    "submitted_at": "2026-07-20T12:00:00Z",
+    "content_identity": {
+      "content_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "target_visibility": "public",
+    "body": "the brain body must never be held"
+  }
+}

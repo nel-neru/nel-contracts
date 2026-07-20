@@ -5,9 +5,9 @@
 in any form — ``[project.dependencies]``, any ``[project.optional-dependencies]`` extra, or a
 PEP 735 ``[dependency-groups]`` group. The sole runtime dependency must be ``pydantic``.
 
-Minimal but real: this resolves the declared dependency *sections* of ``pyproject.toml``. The
-full design also resolves the built wheel/sdist metadata graph in CI; that stronger check is a
-CI step layered on top of this one.
+Minimal but real: this resolves the declared dependency *sections* of ``pyproject.toml``
+(runtime, optional extras, PEP 735 groups, and ``[build-system].requires``). A resolved
+wheel-graph check is a later CI layer (TODO).
 """
 
 from __future__ import annotations
@@ -51,6 +51,13 @@ def _is_private(requirement: str) -> bool:
 
 def _iter_sections(data: dict[str, object]) -> list[tuple[str, list[str]]]:
     sections: list[tuple[str, list[str]]] = []
+    build_system = data.get("build-system", {})
+    if isinstance(build_system, dict):
+        requires = build_system.get("requires", [])
+        if isinstance(requires, list):
+            sections.append(
+                ("build-system.requires", [str(item) for item in requires if isinstance(item, str)])
+            )
     project = data.get("project", {})
     if isinstance(project, dict):
         runtime = project.get("dependencies", [])

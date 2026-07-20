@@ -4,6 +4,8 @@ import json
 import unicodedata
 from pathlib import Path
 
+import pytest
+
 from nel_contracts.canonical.jcs import canonical_json, canonical_json_bytes, canonical_timestamp
 from tests.support import fixed_now
 
@@ -36,6 +38,16 @@ def test_primitives_and_escaping() -> None:
 
 def test_canonical_timestamp_is_fixed_precision_z() -> None:
     assert canonical_timestamp(fixed_now()) == "2026-07-20T12:00:00.000000Z"
+
+
+def test_integral_float_serializes_as_integer() -> None:
+    assert canonical_json({"x": 2.0}) == '{"x":2}'
+
+
+def test_non_integral_number_is_rejected() -> None:
+    # Fail closed rather than emit best-effort (possibly wrong) bytes for a non-integral number.
+    with pytest.raises(ValueError, match="non-integral"):
+        canonical_json({"x": 1.5})
 
 
 def test_golden_byte_fixture_is_reproduced() -> None:

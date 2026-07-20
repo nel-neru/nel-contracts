@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Annotated, Any, Literal
 
-from pydantic import Field, model_validator
+from pydantic import BeforeValidator, Field, model_validator
 
 from nel_contracts.models.actor import ClaimedActor
 from nel_contracts.models.content_identity import ContentIdentity
@@ -158,8 +158,6 @@ AnyWorkIntent = (
     | PiiPolicyIntent
     | OtherIntent
 )
-WorkIntentUnion = Annotated[AnyWorkIntent, Field(discriminator="kind")]
-
 _MEMBERS: dict[str, type[WorkIntent]] = {
     "publish": PublishIntent,
     "delivery": DeliveryIntent,
@@ -178,6 +176,35 @@ KNOWN_INTENT_KINDS = frozenset(_MEMBERS)
 _OTHER_BASE_KEYS = ("intent_id", "actor", "submitted_at", "summary")
 
 
+def _downgrade_to_other(data: Mapping[str, Any]) -> dict[str, Any]:
+    """Rewrite a payload with an unknown/absent ``kind`` into an ``OtherIntent`` payload,
+    preserving the original tag in ``declared_kind`` (design D15)."""
+    downgraded: dict[str, Any] = {key: data[key] for key in _OTHER_BASE_KEYS if key in data}
+    kind = data.get("kind")
+    downgraded["kind"] = "other"
+    downgraded["declared_kind"] = kind if isinstance(kind, str) else None
+    return downgraded
+
+
+def _route_unknown_kind(data: Any) -> Any:
+    """Before-validator for the typed union: an unknown ``kind`` is routed to ``OtherIntent``
+    instead of raising, so the discriminated union has the same open-enum behavior as
+    ``coerce_work_intent`` (design D15)."""
+    if isinstance(data, Mapping):
+        kind = data.get("kind")
+        if not (isinstance(kind, str) and kind in KNOWN_INTENT_KINDS):
+            return _downgrade_to_other(data)
+    return data
+
+
+# The canonical discriminated union over ``kind``. The discriminator is applied to the inner
+# union; a before-validator wraps it (outer) so it runs FIRST and routes an unknown tag to
+# ``OtherIntent`` before discrimination — the typed-union path never raises on an unknown kind,
+# uniform open-enum behavior matching ``coerce_work_intent`` (design D15).
+_DiscriminatedWorkIntent = Annotated[AnyWorkIntent, Field(discriminator="kind")]
+WorkIntentUnion = Annotated[_DiscriminatedWorkIntent, BeforeValidator(_route_unknown_kind)]
+
+
 def coerce_work_intent(payload: Mapping[str, Any]) -> WorkIntent:
     """Parse a wire payload into a concrete intent, running the selected member's validator on
     every submission. An unknown ``kind`` never raises: it downgrades to ``OtherIntent``
@@ -186,7 +213,4 @@ def coerce_work_intent(payload: Mapping[str, Any]) -> WorkIntent:
     kind = data.get("kind")
     if isinstance(kind, str) and kind in _MEMBERS:
         return _MEMBERS[kind].model_validate(data)
-    downgraded: dict[str, Any] = {key: data[key] for key in _OTHER_BASE_KEYS if key in data}
-    downgraded["kind"] = "other"
-    downgraded["declared_kind"] = kind if isinstance(kind, str) else None
-    return OtherIntent.model_validate(downgraded)
+    return OtherIntent.model_validate(_downgrade_to_other(data))
