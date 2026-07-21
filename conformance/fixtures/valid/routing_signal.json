@@ -1,0 +1,11 @@
+{
+  "schema": "routing-signal",
+  "data": {
+    "provider": "claude_code",
+    "is_advisory": true,
+    "finding_adoptions": 3,
+    "false_positives": 1,
+    "escaped_defects": 0,
+    "observed_at": "2026-07-22T00:00:00Z"
+  }
+}

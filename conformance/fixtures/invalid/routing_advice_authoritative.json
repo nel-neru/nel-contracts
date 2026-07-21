@@ -1,0 +1,8 @@
+{
+  "schema": "routing-advice",
+  "data": {
+    "is_advisory": false,
+    "signals": [],
+    "preferred": ["codex"]
+  }
+}

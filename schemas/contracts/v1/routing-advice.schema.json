@@ -1,0 +1,106 @@
+{
+  "$comment": "generated from pinned pydantic + type-level overrides, guarded by generate-and-diff (nel-contracts projector 1); a fuller hand-controlled projection layer is deferred (K-phase)",
+  "$defs": {
+    "RoutingSignal": {
+      "additionalProperties": false,
+      "description": "One ADVISORY calibration observation about a provider's review quality.\n\nModeled on the non-authoritative ``ClaimedActor``: every field is a claim, and the shape is\npinned ``is_advisory=True`` so a public consumer can never mistake it for an authorization\ninput. The kernel's hard filters (active + capability + risk + independence) alone decide\neligibility; a consumer of these signals may at most REORDER candidates its own filters\nalready admitted, and must discard any proposal that is not an exact permutation.\n\n``provider`` is the public ``ActorKind`` vocabulary — a kernel projecting its private runtime\nregistry ids maps them at the boundary (``codex`` → ``codex``, ``claude`` → ``claude_code``),\nmirroring how kernel event actors stay kernel-private. Counts are non-authoritative\naggregates of operator calibration; they carry no receipt and prove nothing.",
+      "properties": {
+        "escaped_defects": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Escaped Defects",
+          "type": "integer"
+        },
+        "false_positives": {
+          "default": 0,
+          "minimum": 0,
+          "title": "False Positives",
+          "type": "integer"
+        },
+        "finding_adoptions": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Finding Adoptions",
+          "type": "integer"
+        },
+        "is_advisory": {
+          "const": true,
+          "default": true,
+          "title": "Is Advisory",
+          "type": "boolean"
+        },
+        "observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed At"
+        },
+        "provider": {
+          "examples": [
+            "claude_code",
+            "codex",
+            "game_engine",
+            "github_actions",
+            "http",
+            "human",
+            "mcp",
+            "script"
+          ],
+          "title": "ActorKind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider"
+      ],
+      "title": "RoutingSignal",
+      "type": "object"
+    }
+  },
+  "$id": "urn:nel:contracts:v1:routing-advice",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "An ADVISORY preference over providers, derived from :class:`RoutingSignal` aggregates.\n\n``preferred`` is at most a permutation hint over candidates the consumer's own hard filters\nadmitted: it can never add a provider, never remove one, and never override an independence\nexclusion. A conforming consumer splices it exactly like the kernel does — reorder first,\nre-derive its exclusions AFTER reordering, and fall back to its own deterministic order when\nthe hint is absent, malformed, or not an exact permutation. Pinned ``is_advisory=True``:\nthis shape is structurally incapable of expressing an authoritative routing decision.",
+  "properties": {
+    "is_advisory": {
+      "const": true,
+      "default": true,
+      "title": "Is Advisory",
+      "type": "boolean"
+    },
+    "preferred": {
+      "items": {
+        "examples": [
+          "claude_code",
+          "codex",
+          "game_engine",
+          "github_actions",
+          "http",
+          "human",
+          "mcp",
+          "script"
+        ],
+        "title": "ActorKind",
+        "type": "string"
+      },
+      "title": "Preferred",
+      "type": "array"
+    },
+    "signals": {
+      "items": {
+        "$ref": "#/$defs/RoutingSignal"
+      },
+      "title": "Signals",
+      "type": "array"
+    }
+  },
+  "title": "RoutingAdvice",
+  "type": "object"
+}

@@ -32,6 +32,12 @@ from nel_contracts.models.capability import (
 )
 from nel_contracts.models.content_identity import ContentIdentity
 from nel_contracts.models.evidence import EvidenceClassification, EvidenceEvent
+from nel_contracts.models.executor import (
+    EXECUTOR_CAPABILITY_IDENTIFIERS,
+    ExecutorCapability,
+    RoutingAdvice,
+    RoutingSignal,
+)
 from nel_contracts.models.identifiers import (
     GitObjectId,
     OpaqueScopeDescriptor,
@@ -172,6 +178,11 @@ __all__ = [  # noqa: RUF022  (grouped by domain for readability, not alphabetize
     "WorkflowDefinition",
     "WorkflowNode",
     "WorkflowRun",
+    # executor competency + advisory routing (K3)
+    "ExecutorCapability",
+    "EXECUTOR_CAPABILITY_IDENTIFIERS",
+    "RoutingSignal",
+    "RoutingAdvice",
     # content identity
     "ContentIdentity",
     # seam DTOs

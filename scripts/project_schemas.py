@@ -33,6 +33,7 @@ from nel_contracts.models.approval import ApprovalRequest, DecisionRecord  # noq
 from nel_contracts.models.capability import Capability, MediatedCapabilityGrant  # noqa: E402
 from nel_contracts.models.content_identity import ContentIdentity  # noqa: E402
 from nel_contracts.models.evidence import EvidenceEvent  # noqa: E402
+from nel_contracts.models.executor import RoutingAdvice, RoutingSignal  # noqa: E402
 from nel_contracts.models.metadata import RepoMetadata  # noqa: E402
 from nel_contracts.models.policy import Policy, PolicyOutcome  # noqa: E402
 from nel_contracts.models.seam import (  # noqa: E402
@@ -96,6 +97,8 @@ SCHEMA_MODELS: dict[str, type[BaseModel]] = {
     "git-work-extension": GitWorkExtension,
     "workflow-definition": WorkflowDefinition,
     "workflow-run": WorkflowRun,
+    "routing-signal": RoutingSignal,
+    "routing-advice": RoutingAdvice,
 }
 
 

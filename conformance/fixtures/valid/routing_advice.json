@@ -1,0 +1,14 @@
+{
+  "schema": "routing-advice",
+  "data": {
+    "is_advisory": true,
+    "signals": [
+      {
+        "provider": "codex",
+        "is_advisory": true,
+        "finding_adoptions": 2
+      }
+    ],
+    "preferred": ["codex", "claude_code"]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "routing-signal",
+  "data": {
+    "provider": "codex",
+    "is_advisory": true,
+    "finding_adoptions": -1
+  }
+}

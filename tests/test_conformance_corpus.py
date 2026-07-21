@@ -8,6 +8,7 @@ from pydantic import BaseModel, ValidationError
 
 from nel_contracts.models.capability import Capability
 from nel_contracts.models.content_identity import ContentIdentity
+from nel_contracts.models.executor import RoutingAdvice, RoutingSignal
 from nel_contracts.models.seam import SeamReceipt
 from nel_contracts.models.work import PublishIntent
 from nel_contracts.models.workflow import WorkflowRun
@@ -26,6 +27,8 @@ _MODELS: dict[str, type[BaseModel]] = {
     "work-item": WorkItem,
     "git-work-extension": GitWorkExtension,
     "workflow-run": WorkflowRun,
+    "routing-signal": RoutingSignal,
+    "routing-advice": RoutingAdvice,
 }
 
 

@@ -13,6 +13,25 @@ Versioning with a wire-shape discipline:
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-22
+
+### Added
+- K3 executor-competency + advisory-routing vocabulary (additive MINOR; realizes the neutral
+  Executor/Capability shapes of ADR-0009 without granting any authority):
+  - `models/executor.py`: `ExecutorCapability` (open vocabulary `implement`/`review`/`adjudicate`;
+    unknown → the `non_executing` default-deny bucket — an unrecognized capability can never be
+    scheduled), plus `RoutingSignal` and `RoutingAdvice` (ADVISORY shapes pinned
+    `is_advisory=True`, modeled on the non-authoritative `ClaimedActor`: provider identity is the
+    public `ActorKind` — a kernel maps its private runtime ids at the boundary, e.g. `claude` →
+    `claude_code` — and counts are non-authoritative operator-calibration aggregates. A conforming
+    consumer may at most reorder candidates its own hard filters admitted, re-deriving its
+    exclusions AFTER reordering, and must fall back to its own deterministic order for any
+    malformed hint).
+  - Competency is deliberately DISTINCT from `models/capability.py::Capability`, whose
+    default-deny invariant models egress blast radius, not competency.
+  - Generated JSON Schemas (`routing-signal`, `routing-advice`) and conformance fixtures
+    (valid and invalid, including the pinned-advisory rejection).
+
 ## [0.2.0] - 2026-07-20
 
 ### Added
